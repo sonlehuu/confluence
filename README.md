@@ -29,7 +29,7 @@ default port: 8090
 - start confluence & mysql
 
 ```
-git clone https://github.com/haxqer/confluence.git \
+git clone https://github.com/sonlehuu/confluence.git \
     && cd confluence \
     && docker-compose up
 ```
