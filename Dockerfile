@@ -1,6 +1,5 @@
 FROM openjdk:17-bullseye
 
-# Thêm các cấu hình và cài đặt môi trường
 ENV CONFLUENCE_HOME=/var/confluence \
     CONFLUENCE_INSTALL=/opt/confluence \
     JVM_MINIMUM_MEMORY=4g \
@@ -10,13 +9,10 @@ ENV CONFLUENCE_HOME=/var/confluence \
     AGENT_FILENAME=atlassian-agent.jar \
     LIB_PATH=/confluence/WEB-INF/lib
 
-# Sao chép các tệp cấu hình và ứng dụng vào container
-COPY confluence.cfg.xml /var/confluence/confluence.cfg.xml
 
-# Cập nhật giá trị cấu hình trong tệp confluence.cfg.xml
+
 RUN sed -i 's|<property name="confluence.word.import.maxsize">.*</property>|<property name="confluence.word.import.maxsize">209715200</property>|' /var/confluence/confluence.cfg.xml
 
-# Tiếp tục các bước cài đặt khác
 RUN mkdir -p ${CONFLUENCE_INSTALL} ${CONFLUENCE_HOME} ${AGENT_PATH} ${CONFLUENCE_INSTALL}${LIB_PATH} \
 && curl -o ${AGENT_PATH}/${AGENT_FILENAME}  https://github.com/haxqer/confluence/releases/download/v${AGENT_VERSION}/atlassian-agent.jar -L \
 && curl -o /tmp/atlassian.tar.gz https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-${APP_NAME}-${APP_VERSION}.tar.gz -L \
