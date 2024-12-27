@@ -6,7 +6,7 @@ ARG ATLASSIAN_PRODUCTION=confluence
 ARG APP_NAME=confluence
 ARG APP_VERSION=9.2.0
 ARG AGENT_VERSION=1.3.3
-ARG ORACLE_DRIVER_VERSION=19.8.0.0
+ARG ORACLE_DRIVER_VERSION=21.9.0.0  # Đổi sang phiên bản phù hợp của ojdbc11
 
 ENV CONFLUENCE_HOME=/var/confluence \
     CONFLUENCE_INSTALL=/opt/confluence \
@@ -24,8 +24,8 @@ RUN mkdir -p ${CONFLUENCE_INSTALL} ${CONFLUENCE_HOME} ${AGENT_PATH} ${CONFLUENCE
 && curl -o /tmp/atlassian.tar.gz https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-${APP_NAME}-${APP_VERSION}.tar.gz -L \
 && tar xzf /tmp/atlassian.tar.gz -C /opt/confluence/ --strip-components 1 \
 && rm -f /tmp/atlassian.tar.gz \
-&& curl -o ${CONFLUENCE_INSTALL}/lib/ojdbc8-${ORACLE_DRIVER_VERSION}.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc8/${ORACLE_DRIVER_VERSION}/ojdbc8-${ORACLE_DRIVER_VERSION}.jar -L \
-&& cp ${CONFLUENCE_INSTALL}/lib/ojdbc8-${ORACLE_DRIVER_VERSION}.jar ${CONFLUENCE_INSTALL}${LIB_PATH}/ojdbc8-${ORACLE_DRIVER_VERSION}.jar \
+&& curl -o ${CONFLUENCE_INSTALL}/lib/ojdbc11-${ORACLE_DRIVER_VERSION}.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/${ORACLE_DRIVER_VERSION}/ojdbc11-${ORACLE_DRIVER_VERSION}.jar -L \
+&& cp ${CONFLUENCE_INSTALL}/lib/ojdbc11-${ORACLE_DRIVER_VERSION}.jar ${CONFLUENCE_INSTALL}${LIB_PATH}/ojdbc11-${ORACLE_DRIVER_VERSION}.jar \
 && echo "confluence.home = ${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/${ATLASSIAN_PRODUCTION}/WEB-INF/classes/confluence-init.properties
 
 WORKDIR $CONFLUENCE_INSTALL
