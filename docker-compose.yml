@@ -14,7 +14,7 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - confluence/data:/var/confluence
+      - home_data:/var/confluence
     restart: always
     networks:
       - network-bridge
