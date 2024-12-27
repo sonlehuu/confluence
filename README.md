@@ -37,7 +37,7 @@ git clone https://github.com/sonlehuu/confluence.git \
 - start confluence & mysql daemon
 
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
 - default db(mysql8.0) configure:
