@@ -1,13 +1,6 @@
 FROM openjdk:17-bullseye
 
-LABEL maintainer="haxqer <haxqer666@gmail.com>" version="9.2.0"
-
-ARG ATLASSIAN_PRODUCTION=confluence
-ARG APP_NAME=confluence
-ARG APP_VERSION=9.2.0
-ARG AGENT_VERSION=1.3.3
-ARG ORACLE_DRIVER_VERSION=21.9.0.0  # Đổi sang phiên bản phù hợp của ojdbc11
-
+# Thêm các cấu hình và cài đặt môi trường
 ENV CONFLUENCE_HOME=/var/confluence \
     CONFLUENCE_INSTALL=/opt/confluence \
     JVM_MINIMUM_MEMORY=4g \
@@ -17,15 +10,20 @@ ENV CONFLUENCE_HOME=/var/confluence \
     AGENT_FILENAME=atlassian-agent.jar \
     LIB_PATH=/confluence/WEB-INF/lib
 
-ENV JAVA_OPTS="-javaagent:${AGENT_PATH}/${AGENT_FILENAME} ${JAVA_OPTS}"
+# Sao chép các tệp cấu hình và ứng dụng vào container
+COPY confluence.cfg.xml /var/confluence/confluence.cfg.xml
 
+# Cập nhật giá trị cấu hình trong tệp confluence.cfg.xml
+RUN sed -i 's|<property name="confluence.word.import.maxsize">.*</property>|<property name="confluence.word.import.maxsize">209715200</property>|' /var/confluence/confluence.cfg.xml
+
+# Tiếp tục các bước cài đặt khác
 RUN mkdir -p ${CONFLUENCE_INSTALL} ${CONFLUENCE_HOME} ${AGENT_PATH} ${CONFLUENCE_INSTALL}${LIB_PATH} \
 && curl -o ${AGENT_PATH}/${AGENT_FILENAME}  https://github.com/haxqer/confluence/releases/download/v${AGENT_VERSION}/atlassian-agent.jar -L \
 && curl -o /tmp/atlassian.tar.gz https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-${APP_NAME}-${APP_VERSION}.tar.gz -L \
 && tar xzf /tmp/atlassian.tar.gz -C /opt/confluence/ --strip-components 1 \
 && rm -f /tmp/atlassian.tar.gz \
-&& curl -o ${CONFLUENCE_INSTALL}/lib/ojdbc11-${ORACLE_DRIVER_VERSION}.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/${ORACLE_DRIVER_VERSION}/ojdbc11-${ORACLE_DRIVER_VERSION}.jar -L \
-&& cp ${CONFLUENCE_INSTALL}/lib/ojdbc11-${ORACLE_DRIVER_VERSION}.jar ${CONFLUENCE_INSTALL}${LIB_PATH}/ojdbc11-${ORACLE_DRIVER_VERSION}.jar \
+&& curl -o ${CONFLUENCE_INSTALL}/lib/ojdbc8-${ORACLE_DRIVER_VERSION}.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc8/${ORACLE_DRIVER_VERSION}/ojdbc8-${ORACLE_DRIVER_VERSION}.jar -L \
+&& cp ${CONFLUENCE_INSTALL}/lib/ojdbc8-${ORACLE_DRIVER_VERSION}.jar ${CONFLUENCE_INSTALL}${LIB_PATH}/ojdbc8-${ORACLE_DRIVER_VERSION}.jar \
 && echo "confluence.home = ${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/${ATLASSIAN_PRODUCTION}/WEB-INF/classes/confluence-init.properties
 
 WORKDIR $CONFLUENCE_INSTALL
