@@ -5,35 +5,16 @@ services:
     container_name: confluence-srv
     environment:
       - TZ=Asia/Bangkok
-      - DB_HOST=oracle-db
+      - DB_HOST=172.20.1.10
       - DB_PORT=1521
       - DB_NAME=CONFLUENCE
       - DB_USER=confluence
       - DB_PASSWORD=admin123
       - DB_TYPE=oracle
-    depends_on:
-      - oracle-db
     ports:
       - "8090:8090"
     volumes:
       - home_data:/var/confluence
-    restart: always
-    networks:
-      - network-bridge
-
-  oracle-db:
-    image: container-registry.oracle.com/database/enterprise:19.3.0.0
-    container_name: oracle-db
-    environment:
-      - TZ=Asia/Bangkok
-      - ORACLE_SID=CONFLUENCE
-      - ORACLE_PDB=CONFLUENCE_PDB
-      - ORACLE_PWD=admin123
-      - ORACLE_CHARACTERSET=AL32UTF8
-    ports:
-      - "1521:1521"
-    volumes:
-      - oracle_data:/opt/oracle/oradata
     restart: always
     networks:
       - network-bridge
@@ -44,6 +25,4 @@ networks:
 
 volumes:
   home_data:
-    external: false
-  oracle_data:
     external: false
