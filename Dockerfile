@@ -28,8 +28,6 @@ RUN mkdir -p ${CONFLUENCE_INSTALL} ${CONFLUENCE_HOME} ${AGENT_PATH} ${CONFLUENCE
 && cp ${CONFLUENCE_INSTALL}/lib/ojdbc11-${ORACLE_DRIVER_VERSION}.jar ${CONFLUENCE_INSTALL}${LIB_PATH}/ojdbc11-${ORACLE_DRIVER_VERSION}.jar \
 && echo "confluence.home = ${CONFLUENCE_HOME}" > ${CONFLUENCE_INSTALL}/${ATLASSIAN_PRODUCTION}/WEB-INF/classes/confluence-init.properties
 
-RUN sed -i 's|<property name="confluence.word.import.maxsize">.*</property>|<property name="confluence.word.import.maxsize">209715200</property>|' /var/confluence/confluence.cfg.xml
-
 WORKDIR $CONFLUENCE_INSTALL
 EXPOSE 8090
 
