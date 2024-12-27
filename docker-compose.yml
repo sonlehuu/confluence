@@ -11,7 +11,7 @@ services:
       - DB_USER=confluence
       - DB_PASSWORD=admin123
       - DB_TYPE=oracle
-      - JVM_SUPPORT_RECOMMENDED_ARGS=-Dconfluence.word.import.maxsize=200
+      - JVM_SUPPORT_RECOMMENDED_ARGS=-Dconfluence.word.import.maxsize=209715200
     ports:
       - "8090:8090"
     volumes:
