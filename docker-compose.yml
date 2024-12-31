@@ -15,7 +15,8 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - /confluence/data:/var/confluence  # Map thư mục trên máy thật vào thư mục trong container
+      - /confluence/data:/var/confluence
+      - /confluence/app:/opt/confluence
     restart: always
     networks:
       - network-bridge
